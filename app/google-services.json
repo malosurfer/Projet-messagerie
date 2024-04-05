@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "153303536455",
+    "firebase_url": "https://projet-messagerie-1d702-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "projet-messagerie-1d702",
+    "storage_bucket": "projet-messagerie-1d702.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153303536455:android:8a623f51324bda02417262",
+        "android_client_info": {
+          "package_name": "fr.cours.projet_messagerie"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACdn0_wxnnMR8cC8_pgvuPqwwmChqZ8wI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
