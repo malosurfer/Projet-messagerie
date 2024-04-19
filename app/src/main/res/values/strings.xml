@@ -27,6 +27,7 @@
     <string name="main_title">Bienvenue sur l\'application de messagerie</string>
     <string name="main_btn">c\'est partis</string>
     <string name="main_logout">déconnexion</string>
+    <string name="title_activity_maps">maps_activity</string>
 
 
 </resources>
