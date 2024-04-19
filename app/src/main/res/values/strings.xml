@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Projet-messagerie</string>
+
+    <!-- Login Activity -->
+    <string name="login_activity_title">Connecter vous à l\'application</string>
+    <string name="login_button_text">Connexion</string>
+    <string name="login_hint_email">Email</string>
+    <string name="login_hint_password">Mot de passe</string>
+    <string name="login_error_mail_required">Erreur : Mail requis pour la connexion</string>
+    <string name="login_error_password_required">Erreur : Mot de passe requis pour la connexion</string>
+    <string name="login_inscription">Menu d/\'inscription</string>
+    <string name="login_success">Connexion réussie</string>
+    <string name="login_failed">Echec de la connexion.</string>
+
+    <!-- signin Activity -->
+    <string name="signin_activity_title">Inscription sur l\'application</string>
+    <string name="signin_button_text">Je m\'inscris</string>
+    <string name="signin_hint_password">Mot de passe</string>
+    <string name="signin_hint_email">Email</string>
+    <string name="signin_error_mail_required">Erreur : Mail requis pour l\'inscription</string>
+    <string name="signin_error_password_required">Erreur : Mot de passe requis pour l\'inscription</string>
+    <string name="signin_error">Echec de l\'inscription</string>
+    <string name="signin_success">Inscription réussie</string>
+    <string name="signin_connexion">Menu de connexion</string>
+
+    <!-- Main Activity -->
+    <string name="main_title">Bienvenue sur l\'application de messagerie</string>
+    <string name="main_btn">c\'est partis</string>
+    <string name="main_logout">déconnexion</string>
+
+
 </resources>
