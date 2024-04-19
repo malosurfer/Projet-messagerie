@@ -27,6 +27,9 @@
     <string name="main_title">Bienvenue sur l\'application de messagerie</string>
     <string name="main_btn">c\'est partis</string>
     <string name="main_logout">déconnexion</string>
+    <string name="test">test</string>
+    <string name="chat_send">envoyer</string>
+    <string name="chat_send_message">ecrivez un message ...</string>
 
 
 </resources>
