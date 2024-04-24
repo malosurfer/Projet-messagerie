@@ -124,6 +124,12 @@ public class SigninActivity extends AppCompatActivity {
                                 }
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(SigninActivity.this, getString(R.string.signin_success), Toast.LENGTH_SHORT).show();
+
+                                // Effacement des infos rentrées après inscription
+                                emailText.setText("");
+                                passwordText.setText("");
+                                userText.setText("");
+
                             } else {
                                 Toast.makeText(SigninActivity.this, getString(R.string.signin_error), Toast.LENGTH_SHORT).show();
                             }
