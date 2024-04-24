@@ -1,5 +1,6 @@
 package fr.cours.projet_messagerie.message;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,7 @@ import java.util.Objects;
 
 import fr.cours.projet_messagerie.R;
 import fr.cours.projet_messagerie.conversation.Conversation;
+import fr.cours.projet_messagerie.conversation.ConversationActivity;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -94,5 +96,8 @@ public class MessageActivity extends AppCompatActivity {
     }
 
 
-
+    public void onClickRetourConversations(View view) {
+        Intent monIntent = new Intent(this, ConversationActivity.class);
+        startActivity(monIntent);
+    }
 }
