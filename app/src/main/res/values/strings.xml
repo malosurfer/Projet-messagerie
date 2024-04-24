@@ -28,5 +28,12 @@
     <string name="main_btn">c\'est partis</string>
     <string name="main_logout">déconnexion</string>
 
+    <!-- CHAT Activity -->
+    <string name="chat_send">envoyer</string>
+    <string name="chat_send_message">ecrivez un message ...</string>
+
+    <!-- GPS Activity -->
+    <string name="title_activity_maps">maps_activity</string>
+
 
 </resources>
