@@ -26,17 +26,18 @@
             android:layout_weight="1">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email"
+                android:id="@+id/MessagetextZone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/chat_send_message" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/btn_logout"
+            android:id="@+id/boutonSendMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
+            android:onClick="onClickSendMessage"
             android:text="@string/chat_send" />
 
     </LinearLayout>
