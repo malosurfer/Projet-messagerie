@@ -75,12 +75,12 @@ public class SigninActivity extends AppCompatActivity {
                 password = String.valueOf(passwordText.getText());
                 username = String.valueOf(userText.getText());
 
-                if (TextUtils.isEmpty(email)){
+                if (TextUtils.isEmpty(email)) {
                     Toast.makeText(SigninActivity.this, getString(R.string.signin_error_mail_required), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (TextUtils.isEmpty(password)){
+                if (TextUtils.isEmpty(password)) {
                     Toast.makeText(SigninActivity.this, getString(R.string.signin_error_password_required), Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -107,7 +107,7 @@ public class SigninActivity extends AppCompatActivity {
                                 maMap.put("username", username);
                                 bd.collection("/Users").add(maMap);
 
-                                if (user != null){
+                                if (user != null) {
                                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(username).build();
                                     user.updateProfile(profileUpdates)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
