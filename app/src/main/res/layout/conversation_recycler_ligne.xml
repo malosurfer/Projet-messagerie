@@ -16,5 +16,6 @@
         android:id="@+id/id_bouton_conversation_ligne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="lancer_discussion"
         android:text="Discuter" />
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +21,7 @@ import java.util.stream.IntStream;
 
 import fr.cours.projet_messagerie.Authentification.LoginActivity;
 import fr.cours.projet_messagerie.R;
+import fr.cours.projet_messagerie.message.MessageActivity;
 
 public class ConversationActivity extends AppCompatActivity {
     FirebaseAuth Auth;
@@ -71,5 +73,10 @@ public class ConversationActivity extends AppCompatActivity {
             Conversation c = new Conversation(monUtilisateur.getEmail());
             return c;
         }).collect(Collectors.toList());
+    }
+
+    public void lancer_discussion(View view) {
+        Intent monIntent = new Intent(this, MessageActivity.class);
+        startActivity(monIntent);
     }
 }
