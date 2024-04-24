@@ -24,8 +24,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import fr.cours.projet_messagerie.MainActivity;
 import fr.cours.projet_messagerie.R;
+import fr.cours.projet_messagerie.conversation.ConversationActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
             startActivity(intent);
             finish();
         }
@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), getString(R.string.login_success), Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
                                     startActivity(intent);
                                     finish();
                                 } else {
