@@ -1,4 +1,4 @@
-package fr.cours.projet_messagerie;
+package fr.cours.projet_messagerie.conversation;
 
 import android.os.Bundle;
 
@@ -12,6 +12,8 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import fr.cours.projet_messagerie.R;
 
 public class liste_conversations extends AppCompatActivity {
     FirebaseUser unFirebaseUser;

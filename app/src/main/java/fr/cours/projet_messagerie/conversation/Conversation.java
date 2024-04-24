@@ -1,4 +1,4 @@
-package fr.cours.projet_messagerie;
+package fr.cours.projet_messagerie.conversation;
 
 import com.google.firebase.auth.FirebaseUser;
 

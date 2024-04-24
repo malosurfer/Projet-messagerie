@@ -1,4 +1,4 @@
-package fr.cours.projet_messagerie;
+package fr.cours.projet_messagerie.conversation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.List;
+
+import fr.cours.projet_messagerie.R;
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationViewHolder> {
     private List<Conversation> lesConversations;

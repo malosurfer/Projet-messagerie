@@ -1,4 +1,4 @@
-package fr.cours.projet_messagerie;
+package fr.cours.projet_messagerie.conversation;
 
 import android.view.View;
 import android.widget.TextView;
@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Objects;
+
+import fr.cours.projet_messagerie.R;
 
 public class ConversationViewHolder extends RecyclerView.ViewHolder {
     private TextView conversationTextView;
