@@ -1,3 +1,4 @@
+/*
 package fr.cours.projet_messagerie.Maps;
 
 import androidx.core.app.ActivityCompat;
@@ -55,7 +56,8 @@ public class maps_activity extends FragmentActivity implements OnMapReadyCallbac
         }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
     }
-    /**
+    */
+/**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
@@ -63,7 +65,8 @@ public class maps_activity extends FragmentActivity implements OnMapReadyCallbac
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
-     */
+     *//*
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -73,4 +76,4 @@ public class maps_activity extends FragmentActivity implements OnMapReadyCallbac
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
-}
+}*/
