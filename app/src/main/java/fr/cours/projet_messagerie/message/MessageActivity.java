@@ -12,22 +12,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import fr.cours.projet_messagerie.R;
+import fr.cours.projet_messagerie.conversation.Conversation;
 
 public class MessageActivity extends AppCompatActivity {
 
     private FirebaseFirestore mabd;
 
     private RecyclerView messageRecycler;
+
+    private List<message> lesmessages;
 
     private EditText messageTextSend;
 
@@ -44,7 +49,15 @@ public class MessageActivity extends AppCompatActivity {
 
         messageRecycler = findViewById(R.id.recycler_messages); // Chargement du recycler view de messages
 
+        initLesMessages();
 
+        MessageAdapter monadapterMessage = new MessageAdapter(lesmessages);
+        messageRecycler.setLayoutManager(new LinearLayoutManager(this));
+        messageRecycler.setAdapter(monadapterMessage);
+    }
+
+    private void initLesMessages() {
+        // Création des messages
     }
 
     public void onClickSendMessage(View view) {
