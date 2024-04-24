@@ -84,7 +84,7 @@ public class MessageActivity extends AppCompatActivity {
                 for (Message message : messages) {
                     // Faites quelque chose avec chaque conversation
                     // Par exemple, affichez les détails de la conversation
-                    Log.d("Conversation", "Contenu : " + message.getContenu() + ", uuidSender : " + message.getSender() + ", uuidReceiver : " + message.getReceiver() + "time : " + message.getDate());
+                    Log.d("Message", "Contenu : " + message.getContenu() + ", uuidSender : " + message.getSender() + ", uuidReceiver : " + message.getReceiver() + "time : " + message.getDate());
                 }
                 updateRecyclerView();
             }
@@ -123,14 +123,10 @@ public class MessageActivity extends AppCompatActivity {
                             String uuidReceiver = document.getString("uuidReceiver");
                             String content = document.getString("content");
                             Timestamp time = Timestamp.valueOf(document.getString("time"));
-                            Message leMessage = new Message(content, UUID.fromString(uuidSender), UUID.fromString(uuidReceiver), time, new OnConversationLoadedListener() {
-                                @Override
-                                public void onConversationLoaded(Message leMessage) {
-                                    Lesmessages.add(leMessage);
-                                    Log.d("AJOUT", "true");
-                                    listener.onConversationsInitialized(Lesmessages);
-                                }
-                            });
+                            Message leMessage = new Message(content, UUID.fromString(uuidSender), UUID.fromString(uuidReceiver), time);
+                            Lesmessages.add(leMessage);
+                            Log.d("AJOUT", "true");
+                            listener.onConversationsInitialized(Lesmessages);
                         }
                     })
                     .addOnFailureListener(e -> {
@@ -149,14 +145,10 @@ public class MessageActivity extends AppCompatActivity {
                             String uuidReceiver = document.getString("uuidReceiver");
                             String content = document.getString("content");
                             Timestamp time = Timestamp.valueOf(document.getString("time"));
-                            Message leMessage = new Message(content, UUID.fromString(uuidSender), UUID.fromString(uuidReceiver), time, new OnConversationLoadedListener() {
-                                @Override
-                                public void onConversationLoaded(Message leMessage) {
-                                    Lesmessages.add(leMessage);
-                                    Log.d("AJOUT", "true");
-                                    listener.onConversationsInitialized(Lesmessages);
-                                }
-                            });
+                            Message leMessage = new Message(content, UUID.fromString(uuidSender), UUID.fromString(uuidReceiver), time);
+                            Lesmessages.add(leMessage);
+                            Log.d("AJOUT", "true");
+                            listener.onConversationsInitialized(Lesmessages);
                         }
                     })
                     .addOnFailureListener(e -> {
@@ -179,10 +171,10 @@ public class MessageActivity extends AppCompatActivity {
             Map<String, Object> message = new HashMap<>();
             message.put("text", messageText);
             message.put("timestamp", timestamp);
-            //message.put("uuidSender",uuidSender);
-            //message.put("uuidReceiver",uuidReceiver);
+            message.put("uuidSender",monUuid);
+            message.put("uuidReceiver",uuidReceiver);
 
-            bd.collection("messages")
+            bd.collection("Messages")
                     .add(message)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(MessageActivity.this, "Le message a bien été envoyé", Toast.LENGTH_SHORT).show();

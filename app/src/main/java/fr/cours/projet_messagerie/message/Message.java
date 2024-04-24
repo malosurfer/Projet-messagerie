@@ -3,8 +3,6 @@ package fr.cours.projet_messagerie.message;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import fr.cours.projet_messagerie.conversation.OnConversationLoadedListener;
-
 public class Message {
     private String contenu;
     private UUID sender;
