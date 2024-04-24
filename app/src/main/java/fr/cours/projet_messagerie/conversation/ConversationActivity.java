@@ -1,6 +1,8 @@
 package fr.cours.projet_messagerie.conversation;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import fr.cours.projet_messagerie.R;
+import fr.cours.projet_messagerie.message.MessageActivity;
 
 public class ConversationActivity extends AppCompatActivity {
     FirebaseUser unFirebaseUser;
@@ -40,5 +43,10 @@ public class ConversationActivity extends AppCompatActivity {
             Conversation c = new Conversation(unFirebaseUser.getEmail());
             return c;
         }).collect(Collectors.toList());
+    }
+
+    public void lancer_discussion(View view) {
+        Intent monIntent = new Intent(this, MessageActivity.class);
+        startActivity(monIntent);
     }
 }
