@@ -102,10 +102,9 @@ public class SigninActivity extends AppCompatActivity {
                                 // Création de l'user dans la base de donnée
                                 bd = FirebaseFirestore.getInstance();
                                 Map<String, Object> maMap = new HashMap<>();
-                                maMap.put("uuid",user.getUid());
                                 maMap.put("Email", email);
                                 maMap.put("username", username);
-                                bd.collection("/Users").add(maMap);
+                                bd.collection("/Users").document(user.getUid()).set(maMap);
 
                                 if (user != null) {
                                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(username).build();

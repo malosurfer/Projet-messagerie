@@ -1,49 +1,88 @@
 package fr.cours.projet_messagerie.conversation;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-public class Conversation {
+import java.io.Serializable;
+
+public class Conversation implements Serializable {
     private String Email, Username, Uuid;
     private FirebaseAuth mAuth;
     private FirebaseFirestore bd = FirebaseFirestore.getInstance();
 
-    public Conversation() {
+    public Conversation() {}
 
-    }
     public Conversation(String Uuid) {
         this.Uuid = Uuid;
-        bd.collection("Users").whereEqualTo(Uuid, "uuid").get()
-            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        String email = document.getString("email");
-                        String username = document.getString("username");
 
-                        Email = email;
-                        Username = username;
+        DocumentReference docRef = bd.collection("Users").document(Uuid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("USER_EXIST", "DocumentSnapshot data: " + document.getData());
+                        String email = document.getString("Email");
+                        String username = document.getString("username");
+                        setEmail(email);
+                        setUsername(username);
+                        Log.d("USER_EXIST", "Object data : " + getUsername() + ";" + getEmail() + ";" + getUuid());
+                        // Appel du callback une fois que la conversation est chargée
+                    } else {
+                        Log.d("USER_NOT_EXIST", "No such document");
                     }
+                } else {
+                    Log.d("USER_FAILED", "get failed with ", task.getException());
                 }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // erreur utilisateur inconnu
+            }
+        });
+    }
+    public Conversation(String Uuid, OnConversationLoadedListener listener) {
+        this.Uuid = Uuid;
+
+        DocumentReference docRef = bd.collection("Users").document(Uuid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("USER_EXIST", "DocumentSnapshot data: " + document.getData());
+                        String email = document.getString("Email");
+                        String username = document.getString("username");
+                        setEmail(email);
+                        setUsername(username);
+                        Log.d("USER_EXIST", "Object data : " + getUsername() + ";" + getEmail() + ";" + getUuid());
+                        // Appel du callback une fois que la conversation est chargée
+                        listener.onConversationLoaded(Conversation.this);
+                    } else {
+                        Log.d("USER_NOT_EXIST", "No such document");
+                    }
+                } else {
+                    Log.d("USER_FAILED", "get failed with ", task.getException());
                 }
-            });
+            }
+        });
     }
 
-    public String getEmail() {return Email;}
-    public String getUsername() { return Username; }
-    public String getUuid() { return Uuid; }
+    public String getEmail() {
+        return this.Email;
+    }
+    public String getUsername() {
+        return this.Username;
+    }
+    public String getUuid() {
+        return this.Uuid;
+    }
 
 
 
