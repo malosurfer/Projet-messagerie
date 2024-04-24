@@ -24,13 +24,14 @@ import fr.cours.projet_messagerie.R;
 import fr.cours.projet_messagerie.message.MessageActivity;
 
 public class ConversationActivity extends AppCompatActivity {
-    FirebaseAuth Auth;
-    FirebaseUser monUtilisateur;
-    Button btn_logout;
-    TextView textView;
-    FirebaseUser user;
+    private FirebaseAuth Auth;
+    private FirebaseUser monUtilisateur;
+    private Button btn_logout;
+    private TextView textView;
+    private FirebaseUser user;
+    private String monUuid;
     private FirebaseFirestore bd;
-    private List<Conversation> lesConversations;
+    private List<Conversation> Lesutilisateurs;
     private RecyclerView monRecyclerView;
 
     @Override
@@ -38,10 +39,13 @@ public class ConversationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_conversation);
+
+        //
         Auth = FirebaseAuth.getInstance();
         monUtilisateur = Auth.getCurrentUser();
-        btn_logout = findViewById(R.id.btn_logout);
 
+        // Initialisation du bouton de deconnexion
+        btn_logout = findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,27 +56,33 @@ public class ConversationActivity extends AppCompatActivity {
             }
         });
 
+        // Initialisation de la base de donnée
+        bd = FirebaseFirestore.getInstance();
 
+        // Initialisation du nom d'utilisateur de la personne connectée
         textView = findViewById(R.id.text_email);
         textView.setText(monUtilisateur.getEmail());
 
 
+
+        //initialisation de la liste des conversations avec les utilisateurs
         monRecyclerView = findViewById(R.id.id_recyclerView_liste_conversations);
+        initLesConversations();
 
-        //initLesConversations();
-
-        //ConversationAdapter maConversationAdapter = new ConversationAdapter(lesConversations);
-        //monRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //monRecyclerView.setAdapter(maConversationAdapter);
+        ConversationAdapter maConversationAdapter = new ConversationAdapter(Lesutilisateurs);
+        monRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        monRecyclerView.setAdapter(maConversationAdapter);
     }
 
 
 
     private void initLesConversations(){
-        lesConversations = IntStream.range(0,100).mapToObj(i->{
-            Conversation c = new Conversation(monUtilisateur.getEmail());
-            return c;
-        }).collect(Collectors.toList());
+        // Récupérer la liste des utilisateurs
+
+        monUuid = monUtilisateur.getUid();
+        // bd.collection("message")
+
+
     }
 
     public void lancer_discussion(View view) {

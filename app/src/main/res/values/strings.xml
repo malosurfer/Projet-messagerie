@@ -43,6 +43,7 @@
 
     <!-- Conversation Activity -->
     <string name="refresh_conversations">+</string>
+    <string name="conversation_error_uuid">Utilisateur inconnu</string>
 
 
 </resources>
