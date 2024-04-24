@@ -1,16 +1,21 @@
 package fr.cours.projet_messagerie.message;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.UUID;
+import java.util.Date;
 
 public class message {
     private String contenu;
     private UUID sender;
     private UUID receiver;
+    private Timestamp date;
 
-    public message(String contenu, UUID sender, UUID receiver) {
+    public message(String contenu, UUID sender, UUID receiver, Timestamp date) {
         this.contenu = contenu;
         this.sender = sender;
         this.receiver = receiver;
+        this.date = date;
     }
 
     public String getContenu() {
@@ -36,4 +41,8 @@ public class message {
     public void setReceiver(UUID receiver) {
         this.receiver = receiver;
     }
+
+    public Timestamp getDate() {return date;}
+
+    public void setDate(Timestamp date) { this.date = date;}
 }
