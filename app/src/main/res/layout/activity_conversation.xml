@@ -32,30 +32,37 @@
             android:text="@string/main_logout" />
 
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/id_recyclerView_liste_conversations"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/border">>
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/id_recyclerView_liste_conversations"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom|end"
+            android:orientation="vertical"
+            android:background="@drawable/border">
+
+            <Button
+                android:id="@+id/id_bouton_refresh_conversation"
+                android:layout_width="54dp"
+                android:layout_height="59dp"
+                android:text="@string/refresh_conversations" />
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="bottom|end"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/id_bouton_refresh_conversation"
-            android:layout_width="54dp"
-            android:layout_height="59dp"
-            android:text="@string/refresh_conversations" />
-    </LinearLayout>
 
 </LinearLayout>

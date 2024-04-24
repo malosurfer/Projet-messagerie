@@ -3,6 +3,7 @@ package fr.cours.projet_messagerie.Authentification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -114,9 +115,9 @@ public class SigninActivity extends AppCompatActivity {
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
                                                     // La mise à jour du profil de l'utilisateur a réussi
-                                                    Toast.makeText(SigninActivity.this, getString(R.string.signin_adding_username), Toast.LENGTH_SHORT).show();
+                                                    Log.d("SUCCESS",getString(R.string.signin_adding_username));
                                                 } else {
-                                                    Toast.makeText(SigninActivity.this, getString(R.string.signin_error_adding_username), Toast.LENGTH_SHORT).show();
+                                                    Log.d("ERROR",getString(R.string.signin_error_adding_username));
                                                 }
                                             }
                                         });

@@ -26,6 +26,9 @@ import fr.cours.projet_messagerie.Authentification.LoginActivity;
 import fr.cours.projet_messagerie.R;
 import fr.cours.projet_messagerie.message.MessageActivity;
 
+interface OnConversationsInitializedListener {
+    void onConversationsInitialized(ArrayList<Conversation> conversations);
+}
 public class ConversationActivity extends AppCompatActivity {
     private FirebaseAuth Auth;
     private FirebaseUser monUtilisateur;
@@ -34,7 +37,7 @@ public class ConversationActivity extends AppCompatActivity {
     private FirebaseUser user;
     private String monUuid;
     private FirebaseFirestore bd;
-    private List<Conversation> Lesconversations;
+    private ArrayList<Conversation> Lesconversations;
     private RecyclerView monRecyclerView;
 
     @Override
@@ -74,17 +77,25 @@ public class ConversationActivity extends AppCompatActivity {
 
 
         //initialisation de la liste
-        initLesConversation2s();
-
+        initLesConversations(new OnConversationsInitializedListener() {
+            @Override
+            public void onConversationsInitialized(ArrayList<Conversation> conversations) {
+                for (Conversation conversation : conversations) {
+                    // Faites quelque chose avec chaque conversation
+                    // Par exemple, affichez les détails de la conversation
+                    Log.d("Conversation", "Uuid : " + conversation.getUuid() + ", Email : " + conversation.getEmail() + ", Username : " + conversation.getUsername());
+                }
+                updateRecyclerView();
+            }
+        });
+    }
+    private void updateRecyclerView() {
         // Mettre à jour l'adaptateur du RecyclerView avec la liste des conversations
         Log.d("ConversationSize", String.valueOf(Lesconversations.size()));
-        if (Lesconversations.size() > 0) {
-            ConversationAdapter maConversationAdapter = new ConversationAdapter(Lesconversations);
-            monRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            monRecyclerView.setAdapter(maConversationAdapter);
-        }
+        ConversationAdapter maConversationAdapter = new ConversationAdapter(Lesconversations);
+        monRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        monRecyclerView.setAdapter(maConversationAdapter);
     }
-
     private void initLesConversation2s(){
         Lesconversations = new ArrayList<>();
         Conversation conv1 = new Conversation("vOhsJSrzD1Tl17Ds5LTmavBHvEG3");
@@ -93,7 +104,7 @@ public class ConversationActivity extends AppCompatActivity {
         Lesconversations.add(conv2);
     }
 
-    private void initLesConversations() {
+    private void initLesConversations(OnConversationsInitializedListener listener) {
         // Récupérer la liste des conversations
         Lesconversations = new ArrayList<>();
 
@@ -111,38 +122,62 @@ public class ConversationActivity extends AppCompatActivity {
                             // Ce receiver à reçu des messages de monUuid
                             // On construit une Conversation
                             String currentUuid = document.getString("uuidReceiver");
-                            Conversation laConversation = new Conversation(currentUuid);
-                            if (Lesconversations.contains(laConversation) == false){
-                                Log.d("AJOUT", "true");
-                                Lesconversations.add(laConversation);
-                                Log.d("SIZE", String.valueOf(Lesconversations.size()));
-                            }else{
-                                Log.d("AJOUT", "false");
-                            }
-                            // On regarde si la personne est déjà dans la liste des conversation
-
-                            // On vérifie si la personne avec qui l'utilisateur communique est déjà dans la liste des conversations
-                            //if (!Lesconversations.contains(conversation)) {
-                                // Si elle n'est pas dans la liste, on l'ajoute
-
-                            //}
+                            Conversation laConversation = new Conversation(currentUuid, new OnConversationLoadedListener() {
+                                @Override
+                                public void onConversationLoaded(Conversation laConversation) {
+                                    Boolean valid = true;
+                                    for (Conversation conversation : Lesconversations) {
+                                        if (conversation.getUuid().equals(laConversation.getUuid())) {
+                                            valid = false;
+                                            break;
+                                        }
+                                    }
+                                    if (valid){
+                                        Log.d("AJOUT", "true");
+                                        Lesconversations.add(laConversation);
+                                        Log.d("SIZE", String.valueOf(Lesconversations.size()));
+                                    }else{
+                                        Log.d("AJOUT", "false");
+                                    }
+                                    listener.onConversationsInitialized(Lesconversations);
+                                }
+                            });
                         }
                     })
                     .addOnFailureListener(e -> {
-                        // Gérer les erreurs
+                        Log.d("ERROR", "Failed Request databased");
                     });
             bd.collection("Messages")
                     .whereEqualTo("uuidReceiver", monUuid)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            Conversation conversation = new Conversation(document.getString("uuidSender"));
+                            Conversation conversation = new Conversation(document.getString("uuidSender"), new OnConversationLoadedListener() {
+                                @Override
+                                public void onConversationLoaded(Conversation laConversation) {
+                                    Boolean valid = true;
+                                    for (Conversation conversation : Lesconversations) {
+                                        if (conversation.getUuid().equals(laConversation.getUuid())) {
+                                            valid = false;
+                                            break;
+                                        }
+                                    }
+                                    if (valid){
+                                        Log.d("AJOUT", "true");
+                                        Lesconversations.add(laConversation);
+                                        Log.d("SIZE", String.valueOf(Lesconversations.size()));
+                                    }else{
+                                        Log.d("AJOUT", "false");
+                                    }
+                                    listener.onConversationsInitialized(Lesconversations);
+                                }
+                            });
+
+
                             // On regarde si la personne est déjà dans la liste des conversation
-                            //Log.d("USER_DATA", )
                             // On vérifie si la personne avec qui l'utilisateur communique est déjà dans la liste des conversations
                             //if (!Lesconversations.contains(conversation)) {
-                                // Si elle n'est pas dans la liste, on l'ajoute
-                                Lesconversations.add(conversation);
+                            // Si elle n'est pas dans la liste, on l'ajoute
                             //}
                         }
                     })
