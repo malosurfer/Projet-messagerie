@@ -11,26 +11,22 @@ import java.util.Objects;
 import fr.cours.projet_messagerie.R;
 
 public class MessageViewHolder extends RecyclerView.ViewHolder {
-    private TextView message;
-    private View myView;
+    private TextView monmessageTextView;
     public MessageViewHolder(@NonNull View itemView) {
         super(itemView);
-        myView = itemView.findViewById(R.id.right_chat_textview);
-
-        myView.findViewById(R.id.right_chat_textview);
-
-        if() // Utilisateur actuel
+        if(true) // Utilisateur actuel
         {
-            this.message = itemView.findViewById(R.id.right_chat_textview);
+            this.monmessageTextView = itemView.findViewById(R.id.right_chat_textview);
         }
-        else // Utiliseur qui envoie
+        else // Autre utilisateur
         {
-            this.message = itemView.findViewById(R.id.left_chat_textview);
+            this.monmessageTextView = itemView.findViewById(R.id.left_chat_textview);
         }
     }
 
-    /*public void mettreAJour(message monmessage){
-        if(Objects.nonNull(monmessage)){
-            this.contenu.setText(.getPrenom());
-        }*/
+    public void mettreAJour(message unmessage) {
+        if (Objects.nonNull(unmessage)) {
+            this.monmessageTextView.setText(unmessage.getContenu());
+        }
+    }
 }
