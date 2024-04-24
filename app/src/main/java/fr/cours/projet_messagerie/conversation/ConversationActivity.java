@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 
 import fr.cours.projet_messagerie.R;
 
-public class liste_conversations extends AppCompatActivity {
+public class ConversationActivity extends AppCompatActivity {
     FirebaseUser unFirebaseUser;
     private List<Conversation> lesConversations;
     private RecyclerView monRecyclerView;
@@ -24,7 +24,7 @@ public class liste_conversations extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.liste_conversations_layout);
+        setContentView(R.layout.activity_conversation);
 
         monRecyclerView = findViewById(R.id.id_recyclerView_liste_conversations);
 

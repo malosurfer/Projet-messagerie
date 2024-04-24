@@ -35,5 +35,8 @@
     <!-- GPS Activity -->
     <string name="title_activity_maps">maps_activity</string>
 
+    <!-- Conversation Activity -->
+    <string name="refresh_conversations">+</string>
+
 
 </resources>
