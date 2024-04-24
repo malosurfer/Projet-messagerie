@@ -24,8 +24,6 @@ import fr.cours.projet_messagerie.conversation.ConversationActivity;
 public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
-    Button btn_logout;
-    TextView textView;
     FirebaseUser user;
     private FirebaseFirestore bd;
     @Override
@@ -34,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         auth = FirebaseAuth.getInstance();
-        btn_logout = findViewById(R.id.btn_logout);
-        textView = findViewById(R.id.text_email);
 
         user = auth.getCurrentUser();
         if (user == null){
@@ -47,16 +43,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        // Connexion base de donnée
-        btn_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+
 
     }
 }
