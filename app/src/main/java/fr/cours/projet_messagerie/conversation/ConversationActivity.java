@@ -46,7 +46,7 @@ public class ConversationActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_conversation);
 
-        //
+        // Initialisation de l'utilisateur
         Auth = FirebaseAuth.getInstance();
         monUtilisateur = Auth.getCurrentUser();
 
@@ -108,11 +108,8 @@ public class ConversationActivity extends AppCompatActivity {
         // Récupérer la liste des conversations
         Lesconversations = new ArrayList<>();
 
-
         monUuid = monUtilisateur.getUid();
         if (monUuid != null) {
-
-            Log.d("CONVERSATIONACT_MONUUID", monUuid);
             // Récupérer les messages où l'utilisateur actuel est soit l'expéditeur soit le destinataire
             bd.collection("Messages")
                     .whereEqualTo("uuidSender", monUuid)

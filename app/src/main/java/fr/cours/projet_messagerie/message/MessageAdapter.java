@@ -13,9 +13,9 @@ import fr.cours.projet_messagerie.R;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
-    private List<message> lesMessages;
+    private List<Message> lesMessages;
 
-    public MessageAdapter(List<message> lesMessages) {
+    public MessageAdapter(List<Message> lesMessages) {
         this.lesMessages = lesMessages;
     }
     @NonNull

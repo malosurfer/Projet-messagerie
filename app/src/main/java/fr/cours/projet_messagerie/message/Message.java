@@ -1,22 +1,23 @@
 package fr.cours.projet_messagerie.message;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.UUID;
-import java.util.Date;
 
-public class message {
+import fr.cours.projet_messagerie.conversation.OnConversationLoadedListener;
+
+public class Message {
     private String contenu;
     private UUID sender;
     private UUID receiver;
     private Timestamp date;
 
-    public message(String contenu, UUID sender, UUID receiver, Timestamp date) {
+    public Message(String contenu, UUID sender, UUID receiver, Timestamp date) {
         this.contenu = contenu;
         this.sender = sender;
         this.receiver = receiver;
         this.date = date;
     }
+
 
     public String getContenu() {
         return contenu;

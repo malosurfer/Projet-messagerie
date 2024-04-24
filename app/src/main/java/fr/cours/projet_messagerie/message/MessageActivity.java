@@ -10,31 +10,40 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.UUID;
 
 import fr.cours.projet_messagerie.R;
 import fr.cours.projet_messagerie.conversation.Conversation;
 import fr.cours.projet_messagerie.conversation.ConversationActivity;
+import fr.cours.projet_messagerie.conversation.ConversationAdapter;
 
+
+interface OnConversationsInitializedListener {
+    void onConversationsInitialized(ArrayList<Message> messages);
+}
 public class MessageActivity extends AppCompatActivity {
 
-    private FirebaseFirestore mabd;
+    private FirebaseAuth Auth;
+    private FirebaseUser monUtilisateur;
+    private String monUuid, uuidReceiver;
+    private FirebaseFirestore bd;
 
     private RecyclerView messageRecycler;
 
-    private List<message> lesmessages;
+    private ArrayList<Message> Lesmessages;
 
     private EditText messageTextSend;
 
@@ -46,24 +55,118 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.chat_message_recyclerview);
-        messageTextSend=findViewById(R.id.MessagetextZone);
-        boutonSendMessage=findViewById(R.id.boutonSendMessage); // Chargement du bouton de send message
 
+        // Initialisation de l'utilisateur
+        Auth = FirebaseAuth.getInstance();
+        monUtilisateur = Auth.getCurrentUser();
+
+
+        // Initialisation de la base de donnée
+        bd = FirebaseFirestore.getInstance();
+
+
+        // Initialisation des textes de l'activité
+        messageTextSend=findViewById(R.id.MessagetextZone);
         messageRecycler = findViewById(R.id.recycler_messages); // Chargement du recycler view de messages
 
-        initLesMessages();
 
-        MessageAdapter monadapterMessage = new MessageAdapter(lesmessages);
+        boutonSendMessage=findViewById(R.id.boutonSendMessage); // Chargement du bouton de send message
+        boutonSendMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickSendMessage(v);
+            }
+        });
+
+        initLesMessages(new OnConversationsInitializedListener() {
+            @Override
+            public void onConversationsInitialized(ArrayList<Message> messages) {
+                for (Message message : messages) {
+                    // Faites quelque chose avec chaque conversation
+                    // Par exemple, affichez les détails de la conversation
+                    Log.d("Conversation", "Contenu : " + message.getContenu() + ", uuidSender : " + message.getSender() + ", uuidReceiver : " + message.getReceiver() + "time : " + message.getDate());
+                }
+                updateRecyclerView();
+            }
+        });
+
+    }
+    private void updateRecyclerView() {
+        // Mettre à jour l'adaptateur du RecyclerView avec la liste des conversations
+        Log.d("Messages size", String.valueOf(Lesmessages.size()));
+        MessageAdapter monadapterMessage = new MessageAdapter(Lesmessages);
         messageRecycler.setLayoutManager(new LinearLayoutManager(this));
         messageRecycler.setAdapter(monadapterMessage);
     }
 
-    private void initLesMessages() {
-        // Création des messages
+    private void initLesMessages(OnConversationsInitializedListener listener) {
+        // Récupérer la liste des conversations
+        Lesmessages = new ArrayList<>();
+
+        uuidReceiver = ""; // récuperer l'autre personne de la conversation
+        monUuid = monUtilisateur.getUid();
+
+        if (uuidReceiver != null && monUuid != null) {
+
+            // Récupérer les messages concernant la conversation actuelle
+
+            // message à droite
+            bd.collection("Messages")
+                    .whereEqualTo("uuidSender", monUuid)
+                    .whereEqualTo("uuidReceiver", uuidReceiver)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            // Ce receiver à reçu des messages de monUuid
+                            // On construit un message
+                            String uuidSender = document.getString("uuidSender");
+                            String uuidReceiver = document.getString("uuidReceiver");
+                            String content = document.getString("content");
+                            Timestamp time = Timestamp.valueOf(document.getString("time"));
+                            Message leMessage = new Message(content, UUID.fromString(uuidSender), UUID.fromString(uuidReceiver), time, new OnConversationLoadedListener() {
+                                @Override
+                                public void onConversationLoaded(Message leMessage) {
+                                    Lesmessages.add(leMessage);
+                                    Log.d("AJOUT", "true");
+                                    listener.onConversationsInitialized(Lesmessages);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("ERROR", "Failed Request databased");
+                    });
+            // Message à gauche
+            bd.collection("Messages")
+                    .whereEqualTo("uuidSender", uuidReceiver)
+                    .whereEqualTo("uuidReceiver", monUuid)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            // Ce receiver à reçu des messages de monUuid
+                            // On construit un message
+                            String uuidSender = document.getString("uuidSender");
+                            String uuidReceiver = document.getString("uuidReceiver");
+                            String content = document.getString("content");
+                            Timestamp time = Timestamp.valueOf(document.getString("time"));
+                            Message leMessage = new Message(content, UUID.fromString(uuidSender), UUID.fromString(uuidReceiver), time, new OnConversationLoadedListener() {
+                                @Override
+                                public void onConversationLoaded(Message leMessage) {
+                                    Lesmessages.add(leMessage);
+                                    Log.d("AJOUT", "true");
+                                    listener.onConversationsInitialized(Lesmessages);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("ERROR", "Failed Request databased");
+                    });
+        }
     }
 
     public void onClickSendMessage(View view) {
-        this.mabd = FirebaseFirestore.getInstance();
+        this.bd = FirebaseFirestore.getInstance();
 
         String messageText = messageTextSend.getText().toString();
 
@@ -79,7 +182,7 @@ public class MessageActivity extends AppCompatActivity {
             //message.put("uuidSender",uuidSender);
             //message.put("uuidReceiver",uuidReceiver);
 
-            mabd.collection("messages")
+            bd.collection("messages")
                     .add(message)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(MessageActivity.this, "Le message a bien été envoyé", Toast.LENGTH_SHORT).show();
