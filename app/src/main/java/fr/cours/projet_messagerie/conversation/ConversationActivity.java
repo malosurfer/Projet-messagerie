@@ -61,7 +61,7 @@ public class ConversationActivity extends AppCompatActivity {
 
         // Initialisation du nom d'utilisateur de la personne connectée
         textView = findViewById(R.id.text_email);
-        textView.setText(monUtilisateur.getEmail());
+        textView.setText(monUtilisateur.getDisplayName());
 
 
 
@@ -69,9 +69,9 @@ public class ConversationActivity extends AppCompatActivity {
         monRecyclerView = findViewById(R.id.id_recyclerView_liste_conversations);
         initLesConversations();
 
-        ConversationAdapter maConversationAdapter = new ConversationAdapter(Lesutilisateurs);
-        monRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        monRecyclerView.setAdapter(maConversationAdapter);
+        //ConversationAdapter maConversationAdapter = new ConversationAdapter(Lesutilisateurs);
+        //monRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //monRecyclerView.setAdapter(maConversationAdapter);
     }
 
 
