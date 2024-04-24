@@ -42,7 +42,7 @@ public class message {
         this.receiver = receiver;
     }
 
-    public Timestamp getDate() {return date;}
+    public Timestamp getDate() { return date; }
 
     public void setDate(Timestamp date) { this.date = date;}
 }

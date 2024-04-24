@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import fr.cours.projet_messagerie.Authentification.LoginActivity;
+import fr.cours.projet_messagerie.conversation.ConversationActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            textView.setText(user.getEmail());
+            Intent intent = new Intent(getApplicationContext(), ConversationActivity.class);
+            startActivity(intent);
+            finish();
         }
         // Connexion base de donnée
         btn_logout.setOnClickListener(new View.OnClickListener() {

@@ -1,4 +1,3 @@
-/*
 package fr.cours.projet_messagerie.Maps;
 
 import androidx.core.app.ActivityCompat;
@@ -23,8 +22,8 @@ import com.google.android.gms.tasks.Task;
 import fr.cours.projet_messagerie.R;
 import fr.cours.projet_messagerie.databinding.MapsActivityBinding;
 
+/*
 public class maps_activity extends FragmentActivity implements OnMapReadyCallback {
-
     private final int FINE_PERMISSION_CODE = 1;
     private GoogleMap mMap;
 
@@ -65,7 +64,9 @@ public class maps_activity extends FragmentActivity implements OnMapReadyCallbac
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
-     *//*
+     */
+
+    /*
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -76,4 +77,5 @@ public class maps_activity extends FragmentActivity implements OnMapReadyCallbac
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
-}*/
+}
+    */

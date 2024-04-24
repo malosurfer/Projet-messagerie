@@ -8,7 +8,7 @@
     <string name="login_hint_password">Mot de passe</string>
     <string name="login_error_mail_required">Erreur : Mail requis pour la connexion</string>
     <string name="login_error_password_required">Erreur : Mot de passe requis pour la connexion</string>
-    <string name="login_inscription">Menu d/\'inscription</string>
+    <string name="login_inscription">Menu d\'inscription</string>
     <string name="login_success">Connexion réussie</string>
     <string name="login_failed">Echec de la connexion.</string>
 
@@ -19,9 +19,13 @@
     <string name="signin_hint_email">Email</string>
     <string name="signin_error_mail_required">Erreur : Mail requis pour l\'inscription</string>
     <string name="signin_error_password_required">Erreur : Mot de passe requis pour l\'inscription</string>
+    <string name="signin_error_user_required">Erreur : Nom d\'utilisateur requis pour l\'inscription</string>
+    <string name="signin_adding_username">Nom d\'utilisateur mis à jour</string>
+    <string name="signin_error_adding_username">Erreur : Nom d\'utilisateur non mis à jour</string>
     <string name="signin_error">Echec de l\'inscription</string>
     <string name="signin_success">Inscription réussie</string>
     <string name="signin_connexion">Menu de connexion</string>
+
 
     <!-- Main Activity -->
     <string name="main_title">Bienvenue sur l\'application de messagerie</string>
@@ -30,10 +34,11 @@
 
     <!-- CHAT Activity -->
     <string name="chat_send">envoyer</string>
-    <string name="chat_send_message">ecrivez un message ...</string>
+    <string name="chat_send_message">ecrivez un message …</string>
 
     <!-- GPS Activity -->
     <string name="title_activity_maps">maps_activity</string>
+    <string name="signin_username">nom d\'utilisateur</string>
 
     <!-- Conversation Activity -->
     <string name="refresh_conversations">+</string>
