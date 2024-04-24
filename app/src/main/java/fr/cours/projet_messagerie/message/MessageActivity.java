@@ -1,6 +1,7 @@
 package fr.cours.projet_messagerie.message;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,9 +64,23 @@ public class MessageActivity extends AppCompatActivity {
             //message.put("uuidSender",uuidSender);
             //message.put("uuidReceiver",uuidReceiver);
 
+            mabd.collection("messages")
+                    .add(message)
+                    .addOnSuccessListener(documentReference -> {
+                        Toast.makeText(MessageActivity.this, "Le message a bien été envoyé", Toast.LENGTH_SHORT).show();
 
-
+                        messageTextSend.setText(""); // Remise à 0 du buffer d'entrée de messages
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(MessageActivity.this, "Erreur lors de l'envoi du message", Toast.LENGTH_SHORT).show();
+                        Log.e("MessageActivity", "Error sending message", e);
+                    });
+        } else {
+            Toast.makeText(this, "Message is empty", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
 
     }
 }
