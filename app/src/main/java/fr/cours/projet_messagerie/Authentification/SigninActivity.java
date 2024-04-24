@@ -23,6 +23,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import fr.cours.projet_messagerie.MainActivity;
 import fr.cours.projet_messagerie.R;
@@ -31,11 +35,13 @@ import fr.cours.projet_messagerie.conversation.ConversationActivity;
 
 public class SigninActivity extends AppCompatActivity {
 
+    FirebaseFirestore bd;
     TextInputEditText emailText, passwordText, userText;
     Button BtnSignin;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView textView;
+
 
     @Override
     public void onStart() {
@@ -79,11 +85,12 @@ public class SigninActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (TextUtils.isEmpty(username)){
+                if (TextUtils.isEmpty(username)) {
                     Toast.makeText(SigninActivity.this, getString(R.string.signin_error_user_required), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
+                // Création de l'user dans firebaseauth
                 mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -91,6 +98,15 @@ public class SigninActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // AJOUT DE L'USERNAME
                                 FirebaseUser user = mAuth.getCurrentUser();
+
+                                // Création de l'user dans la base de donnée
+                                bd = FirebaseFirestore.getInstance();
+                                Map<String, Object> maMap = new HashMap<>();
+                                maMap.put("uuid",user.getUid());
+                                maMap.put("Email", email);
+                                maMap.put("username", username);
+                                bd.collection("/Users").add(maMap);
+
                                 if (user != null){
                                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(username).build();
                                     user.updateProfile(profileUpdates)
