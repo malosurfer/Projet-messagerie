@@ -35,6 +35,7 @@
     <!-- CHAT Activity -->
     <string name="chat_send">envoyer</string>
     <string name="chat_send_message">ecrivez un message …</string>
+    <string name="chat_return">retour aux conversations</string>
 
     <!-- GPS Activity -->
     <string name="title_activity_maps">maps_activity</string>
