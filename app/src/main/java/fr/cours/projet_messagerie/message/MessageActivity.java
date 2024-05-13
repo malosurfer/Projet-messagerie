@@ -52,7 +52,6 @@ public class MessageActivity extends AppCompatActivity {
     Intent intent = getIntent();
     Conversation receiver = (Conversation) intent.getSerializableExtra("receiver");
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
