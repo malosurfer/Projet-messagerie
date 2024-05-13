@@ -1,15 +1,12 @@
 package fr.cours.projet_messagerie.message;
 
-import java.sql.Timestamp;
-import java.util.UUID;
+import com.google.firebase.Timestamp;
 
 public class Message {
-    private String contenu;
-    private UUID sender;
-    private UUID receiver;
+    private String contenu, sender, receiver;
     private Timestamp date;
 
-    public Message(String contenu, UUID sender, UUID receiver, Timestamp date) {
+    public Message(String contenu, String sender, String receiver, Timestamp date) {
         this.contenu = contenu;
         this.sender = sender;
         this.receiver = receiver;
@@ -25,19 +22,19 @@ public class Message {
         this.contenu = contenu;
     }
 
-    public UUID getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(UUID sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
 
-    public UUID getReceiver() {
+    public String getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(UUID receiver) {
+    public void setReceiver(String receiver) {
         this.receiver = receiver;
     }
 

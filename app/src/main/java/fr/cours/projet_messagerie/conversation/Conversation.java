@@ -1,5 +1,7 @@
 package fr.cours.projet_messagerie.conversation;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,11 +14,45 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 
-public class Conversation implements Serializable {
+public class Conversation implements Parcelable {
     private String Email, Username, Uuid;
     private FirebaseFirestore bd = FirebaseFirestore.getInstance();
 
     public Conversation() {}
+
+    protected Conversation(Parcel in) {
+        Email = in.readString();
+        Username = in.readString();
+        Uuid = in.readString();
+    }
+
+    public static final Creator<Conversation> CREATOR = new Creator<Conversation>() {
+        @Override
+        public Conversation createFromParcel(Parcel in) {
+            return new Conversation(in);
+        }
+
+        @Override
+        public Conversation[] newArray(int size) {
+            return new Conversation[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(Email);
+        dest.writeString(Username);
+        dest.writeString(Uuid);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
 
     public Conversation(String Uuid) {
         this.Uuid = Uuid;
@@ -44,6 +80,7 @@ public class Conversation implements Serializable {
             }
         });
     }
+
     public Conversation(String Uuid, OnConversationLoadedListener listener) {
         this.Uuid = Uuid;
 

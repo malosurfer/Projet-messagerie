@@ -90,12 +90,10 @@ public class ConversationActivity extends AppCompatActivity {
         });
     }
     private void updateRecyclerView() {
-        // Mettre à jour l'adaptateur du RecyclerView avec la liste des conversations
-        Log.d("ConversationSize", String.valueOf(Lesconversations.size()));
-        ConversationAdapter maConversationAdapter = new ConversationAdapter(Lesconversations);
-        monRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ConversationAdapter maConversationAdapter = new ConversationAdapter(Lesconversations, this::lancer_discussion);
         monRecyclerView.setAdapter(maConversationAdapter);
     }
+
     private void initLesConversation2s(){
         Lesconversations = new ArrayList<>();
         Conversation conv1 = new Conversation("vOhsJSrzD1Tl17Ds5LTmavBHvEG3");
@@ -184,9 +182,11 @@ public class ConversationActivity extends AppCompatActivity {
         }
     }
 
-    public void lancer_discussion(View view) {
+    public void lancer_discussion(int index) {
         Intent monIntent = new Intent(this, MessageActivity.class);
-        monIntent.putExtra("receiver", Lesconversations.get(0)); // Mettre ici l'indice de notre conversation à la place de 0
+        Conversation conversation = Lesconversations.get(index);
+        monIntent.putExtra("receiver", conversation);
         startActivity(monIntent);
     }
+
 }

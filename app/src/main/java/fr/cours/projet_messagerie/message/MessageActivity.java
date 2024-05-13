@@ -17,13 +17,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.Timestamp;
 
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import fr.cours.projet_messagerie.R;
 import fr.cours.projet_messagerie.conversation.Conversation;
@@ -39,6 +40,7 @@ public class MessageActivity extends AppCompatActivity {
     private FirebaseAuth Auth;
     private FirebaseUser monUtilisateur;
     private String monUuid, uuidReceiver;
+    private Timestamp time;
     private FirebaseFirestore bd;
 
     private RecyclerView messageRecycler;
@@ -49,8 +51,8 @@ public class MessageActivity extends AppCompatActivity {
 
     private Button boutonSendMessage;
 
-    Intent intent = getIntent();
-    Conversation receiver = (Conversation) intent.getSerializableExtra("receiver");
+    Intent intent;
+    Conversation receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,10 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.chat_message_recyclerview);
+
+        intent =  getIntent();
+        receiver = (Conversation) intent.getParcelableExtra("receiver");
+
 
         // Initialisation de l'utilisateur
         Auth = FirebaseAuth.getInstance();
@@ -70,7 +76,7 @@ public class MessageActivity extends AppCompatActivity {
 
         // Initialisation des textes de l'activité
         messageTextSend=findViewById(R.id.MessagetextZone);
-        messageRecycler = findViewById(R.id.recycler_messages); // Chargement du recycler view de messages
+        messageRecycler = findViewById(R.id.recycler_messages);
 
 
         boutonSendMessage=findViewById(R.id.boutonSendMessage); // Chargement du bouton de send message
@@ -78,6 +84,7 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onClickSendMessage(v);
+                updateRecyclerView();
             }
         });
 
@@ -95,12 +102,19 @@ public class MessageActivity extends AppCompatActivity {
 
     }
     private void updateRecyclerView() {
-        // Mettre à jour l'adaptateur du RecyclerView avec la liste des conversations
-        Log.d("Messages size", String.valueOf(Lesmessages.size()));
-        MessageAdapter monadapterMessage = new MessageAdapter(Lesmessages);
-        messageRecycler.setLayoutManager(new LinearLayoutManager(this));
-        messageRecycler.setAdapter(monadapterMessage);
+        // on met les message dans l'ordre chronologique
+        if (Lesmessages != null) {
+            Collections.sort(Lesmessages, (m1, m2) -> m1.getDate().compareTo(m2.getDate()));
+        }
+
+        messageRecycler.setAdapter(new MessageAdapter(Lesmessages));
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setReverseLayout(false);
+        layoutManager.setStackFromEnd(true);
+        messageRecycler.setLayoutManager(layoutManager);
     }
+
 
     private void initLesMessages(OnConversationsInitializedListener listener) {
         // Récupérer la liste des conversations
@@ -110,7 +124,6 @@ public class MessageActivity extends AppCompatActivity {
         monUuid = monUtilisateur.getUid();
 
         if (uuidReceiver != null && monUuid != null) {
-
             // Récupérer les messages concernant la conversation actuelle
 
             // message à droite
@@ -125,10 +138,9 @@ public class MessageActivity extends AppCompatActivity {
                             String uuidSender = document.getString("uuidSender");
                             String uuidReceiver = document.getString("uuidReceiver");
                             String content = document.getString("content");
-                            Timestamp time = Timestamp.valueOf(document.getString("time"));
-                            Message leMessage = new Message(content, UUID.fromString(uuidSender), UUID.fromString(uuidReceiver), time);
+                            Timestamp time = document.getTimestamp("time");
+                            Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
                             Lesmessages.add(leMessage);
-                            Log.d("AJOUT", "true");
                             listener.onConversationsInitialized(Lesmessages);
                         }
                     })
@@ -147,10 +159,9 @@ public class MessageActivity extends AppCompatActivity {
                             String uuidSender = document.getString("uuidSender");
                             String uuidReceiver = document.getString("uuidReceiver");
                             String content = document.getString("content");
-                            Timestamp time = Timestamp.valueOf(document.getString("time"));
-                            Message leMessage = new Message(content, UUID.fromString(uuidSender), UUID.fromString(uuidReceiver), time);
+                            Timestamp time = document.getTimestamp("time");
+                            Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
                             Lesmessages.add(leMessage);
-                            Log.d("AJOUT", "true");
                             listener.onConversationsInitialized(Lesmessages);
                         }
                     })
@@ -168,12 +179,12 @@ public class MessageActivity extends AppCompatActivity {
         if(!messageText.isEmpty()) {
 
             // Get current timestamp
-            long timestamp = System.currentTimeMillis();
+            time = Timestamp.now();
 
             // Create a new message document in Firestore
             Map<String, Object> message = new HashMap<>();
-            message.put("text", messageText);
-            message.put("timestamp", timestamp);
+            message.put("content", messageText);
+            message.put("time", time);
             message.put("uuidSender",monUuid);
             message.put("uuidReceiver",uuidReceiver);
 
