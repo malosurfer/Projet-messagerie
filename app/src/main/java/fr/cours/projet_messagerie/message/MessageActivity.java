@@ -49,6 +49,10 @@ public class MessageActivity extends AppCompatActivity {
 
     private Button boutonSendMessage;
 
+    Intent intent = getIntent();
+    Conversation receiver = (Conversation) intent.getSerializableExtra("receiver");
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -103,7 +107,7 @@ public class MessageActivity extends AppCompatActivity {
         // Récupérer la liste des conversations
         Lesmessages = new ArrayList<>();
 
-        uuidReceiver = ""; // récuperer l'autre personne de la conversation
+        uuidReceiver = receiver.getUuid(); // récuperer l'autre personne de la conversation
         monUuid = monUtilisateur.getUid();
 
         if (uuidReceiver != null && monUuid != null) {
