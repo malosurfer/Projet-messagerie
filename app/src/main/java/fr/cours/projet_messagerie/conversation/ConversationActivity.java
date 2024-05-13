@@ -186,7 +186,7 @@ public class ConversationActivity extends AppCompatActivity {
 
     public void lancer_discussion(View view) {
         Intent monIntent = new Intent(this, MessageActivity.class);
-        monIntent.putExtra("receiver", Lesconversations.get(0));
+        monIntent.putExtra("receiver", Lesconversations.get(0)); // Mettre ici l'indice de notre conversation à la place de 0
         startActivity(monIntent);
     }
 }
