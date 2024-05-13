@@ -91,11 +91,12 @@ public class MessageActivity extends AppCompatActivity {
         initLesMessages(new OnConversationsInitializedListener() {
             @Override
             public void onConversationsInitialized(ArrayList<Message> messages) {
-                for (Message message : messages) {
+                /*for (Message message : messages) {
                     // Faites quelque chose avec chaque conversation
                     // Par exemple, affichez les détails de la conversation
                     Log.d("Message", "Contenu : " + message.getContenu() + ", uuidSender : " + message.getSender() + ", uuidReceiver : " + message.getReceiver() + "time : " + message.getDate());
                 }
+                */
                 updateRecyclerView();
             }
         });
@@ -192,7 +193,6 @@ public class MessageActivity extends AppCompatActivity {
                     .add(message)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(MessageActivity.this, "Le message a bien été envoyé", Toast.LENGTH_SHORT).show();
-
                         messageTextSend.setText(""); // Remise à 0 du buffer d'entrée de messages
                     })
                     .addOnFailureListener(e -> {
@@ -202,6 +202,12 @@ public class MessageActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Message is empty", Toast.LENGTH_SHORT).show();
         }
+        initLesMessages(new OnConversationsInitializedListener() {
+            @Override
+            public void onConversationsInitialized(ArrayList<Message> messages) {
+                updateRecyclerView();
+            }
+        });
     }
 
 
