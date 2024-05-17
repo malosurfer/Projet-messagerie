@@ -26,6 +26,12 @@ public class Conversation implements Parcelable {
         Uuid = in.readString();
     }
 
+    protected Conversation(String uuid, String username, String email) {
+        Uuid = uuid;
+        Username = username;
+        Email = email;
+    }
+
     public static final Creator<Conversation> CREATOR = new Creator<Conversation>() {
         @Override
         public Conversation createFromParcel(Parcel in) {
