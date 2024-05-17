@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -32,7 +33,7 @@ interface OnConversationsInitializedListener {
 public class ConversationActivity extends AppCompatActivity {
     private FirebaseAuth Auth;
     private FirebaseUser monUtilisateur;
-    private Button btn_logout;
+    private Button btn_logout, btn_addConversation;
     private TextView textView;
     private FirebaseUser user;
     private String monUuid;
@@ -87,6 +88,30 @@ public class ConversationActivity extends AppCompatActivity {
                 }
                 updateRecyclerView();
             }
+        });
+
+        btn_addConversation = findViewById(R.id.id_bouton_refresh_conversation);
+        btn_addConversation.setOnClickListener(v -> {
+            UsersListDialogFragment usersDialog = new UsersListDialogFragment();
+            usersDialog.show(getSupportFragmentManager(), "UsersListDialog");
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("Users")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<String> userNames = new ArrayList<>();
+                        for (DocumentSnapshot document : task.getResult()) {
+                            String username = document.getString("username");
+                            if (username != null && !document.getId().equals(monUtilisateur.getUid())) {
+                                userNames.add(username);
+                            }
+                        }
+                        usersDialog.setUsers(userNames);
+                    } else {
+                        Log.w("DatabaseError", "Error getting documents.", task.getException());
+                    }
+                });
         });
     }
     private void updateRecyclerView() {
