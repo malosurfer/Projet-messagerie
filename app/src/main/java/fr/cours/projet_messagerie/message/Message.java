@@ -4,6 +4,7 @@ import com.google.firebase.Timestamp;
 
 public class Message {
     private String contenu, sender, receiver;
+    private Double longitude, latitude;
     private Timestamp date;
 
     public Message(String contenu, String sender, String receiver, Timestamp date) {
@@ -13,6 +14,29 @@ public class Message {
         this.date = date;
     }
 
+    public Message(Double latitude, Double longitude, String sender, String receiver, Timestamp date) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.date = date;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
 
     public String getContenu() {
         return contenu;

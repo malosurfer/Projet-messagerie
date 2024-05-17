@@ -36,6 +36,9 @@
     <string name="chat_send">envoyer</string>
     <string name="chat_send_message">ecrivez un message …</string>
     <string name="chat_return">retour aux conversations</string>
+    <string name="checkbox_position">Transmettre ma position</string>
+    <string name="message_Gauche_Position">Voir position du message</string>
+    <string name="message_Droite_Position">Voir position du message</string>
 
     <!-- GPS Activity -->
     <string name="title_activity_maps">maps_activity</string>

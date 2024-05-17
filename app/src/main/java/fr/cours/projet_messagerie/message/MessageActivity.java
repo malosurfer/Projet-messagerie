@@ -1,17 +1,29 @@
 package fr.cours.projet_messagerie.message;
 
 import android.content.Intent;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.location.Location;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,17 +31,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.Timestamp;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import fr.cours.projet_messagerie.R;
 import fr.cours.projet_messagerie.conversation.Conversation;
 import fr.cours.projet_messagerie.conversation.ConversationActivity;
-import fr.cours.projet_messagerie.conversation.ConversationAdapter;
 
 
 interface OnConversationsInitializedListener {
@@ -37,6 +46,8 @@ interface OnConversationsInitializedListener {
 }
 public class MessageActivity extends AppCompatActivity {
 
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private FusedLocationProviderClient fusedLocationClient;
     private FirebaseAuth Auth;
     private FirebaseUser monUtilisateur;
     private String monUuid, uuidReceiver;
@@ -50,6 +61,7 @@ public class MessageActivity extends AppCompatActivity {
     private EditText messageTextSend;
 
     private Button boutonSendMessage;
+    private CheckBox checkBoxPosition;
 
     Intent intent;
     Conversation receiver;
@@ -73,6 +85,8 @@ public class MessageActivity extends AppCompatActivity {
         // Initialisation de la base de donnée
         bd = FirebaseFirestore.getInstance();
 
+        //initialisation checkbox
+        checkBoxPosition=findViewById(R.id.checkBoxPositionView);
 
         // Initialisation des textes de l'activité
         messageTextSend=findViewById(R.id.MessagetextZone);
@@ -140,9 +154,17 @@ public class MessageActivity extends AppCompatActivity {
                             String uuidReceiver = document.getString("uuidReceiver");
                             String content = document.getString("content");
                             Timestamp time = document.getTimestamp("time");
-                            Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
-                            Lesmessages.add(leMessage);
-                            listener.onConversationsInitialized(Lesmessages);
+                            if(document.contains("latitude")){
+                                Double latitude = document.getDouble("latitude");
+                                Double longitude = document.getDouble("longitude");
+                                Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
+                                Lesmessages.add(leMessage);
+                                listener.onConversationsInitialized(Lesmessages);
+                            } else {
+                                Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
+                                Lesmessages.add(leMessage);
+                                listener.onConversationsInitialized(Lesmessages);
+                            }
                         }
                     })
                     .addOnFailureListener(e -> {
@@ -178,27 +200,66 @@ public class MessageActivity extends AppCompatActivity {
         String messageText = messageTextSend.getText().toString();
 
         if(!messageText.isEmpty()) {
+            if(checkBoxPosition.isChecked()){
+                // Get current timestamp
+                time = Timestamp.now();
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    fusedLocationClient.getLastLocation()
+                            .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    // Got last known location. In some rare situations this can be null.
+                                    if (location != null) {
+                                        double latitude = location.getLatitude();
+                                        double longitude = location.getLongitude();
+                                        // Create a new message document in Firestore
+                                        Map<String, Object> message = new HashMap<>();
+                                        message.put("content", messageText);
+                                        message.put("time", time);
+                                        message.put("longitude", longitude);
+                                        message.put("latitude", latitude);
+                                        message.put("uuidSender", monUuid);
+                                        message.put("uuidReceiver", uuidReceiver);
 
-            // Get current timestamp
-            time = Timestamp.now();
+                                        bd.collection("Messages")
+                                                .add(message)
+                                                .addOnSuccessListener(documentReference -> {
+                                                    Toast.makeText(MessageActivity.this, "Le message a bien été envoyé", Toast.LENGTH_SHORT).show();
+                                                    messageTextSend.setText(""); // Remise à 0 du buffer d'entrée de messages
+                                                })
+                                                .addOnFailureListener(e -> {
+                                                    Toast.makeText(MessageActivity.this, "Erreur lors de l'envoi du message", Toast.LENGTH_SHORT).show();
+                                                    Log.e("MessageActivity", "Error sending message", e);
+                                                });
+                                    }
+                                }
+                            });
+                }
 
-            // Create a new message document in Firestore
-            Map<String, Object> message = new HashMap<>();
-            message.put("content", messageText);
-            message.put("time", time);
-            message.put("uuidSender",monUuid);
-            message.put("uuidReceiver",uuidReceiver);
+            } else {
+                // Get current timestamp
+                time = Timestamp.now();
 
-            bd.collection("Messages")
-                    .add(message)
-                    .addOnSuccessListener(documentReference -> {
-                        Toast.makeText(MessageActivity.this, "Le message a bien été envoyé", Toast.LENGTH_SHORT).show();
-                        messageTextSend.setText(""); // Remise à 0 du buffer d'entrée de messages
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(MessageActivity.this, "Erreur lors de l'envoi du message", Toast.LENGTH_SHORT).show();
-                        Log.e("MessageActivity", "Error sending message", e);
-                    });
+                // Create a new message document in Firestore
+                Map<String, Object> message = new HashMap<>();
+                message.put("content", messageText);
+                message.put("time", time);
+                message.put("uuidSender", monUuid);
+                message.put("uuidReceiver", uuidReceiver);
+
+                bd.collection("Messages")
+                        .add(message)
+                        .addOnSuccessListener(documentReference -> {
+                            Toast.makeText(MessageActivity.this, "Le message a bien été envoyé", Toast.LENGTH_SHORT).show();
+                            messageTextSend.setText(""); // Remise à 0 du buffer d'entrée de messages
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(MessageActivity.this, "Erreur lors de l'envoi du message", Toast.LENGTH_SHORT).show();
+                            Log.e("MessageActivity", "Error sending message", e);
+                        });
+            }
         } else {
             Toast.makeText(this, "Message is empty", Toast.LENGTH_SHORT).show();
         }
@@ -210,6 +271,27 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
+    public void onClickCheckbox(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request the permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkBoxPosition.setChecked(true);
+            } else {
+                // Permission denied, uncheck the checkbox
+                checkBoxPosition.setChecked(false);
+            }
+        }
+    }
 
     public void onClickRetourConversations(View view) {
         Intent monIntent = new Intent(this, ConversationActivity.class);
