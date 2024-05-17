@@ -92,26 +92,27 @@ public class ConversationActivity extends AppCompatActivity {
 
         btn_addConversation = findViewById(R.id.id_bouton_refresh_conversation);
         btn_addConversation.setOnClickListener(v -> {
-            UsersListDialogFragment usersDialog = new UsersListDialogFragment();
-            usersDialog.show(getSupportFragmentManager(), "UsersListDialog");
-
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("Users")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        List<String> userNames = new ArrayList<>();
-                        for (DocumentSnapshot document : task.getResult()) {
-                            String username = document.getString("username");
-                            if (username != null && !document.getId().equals(monUtilisateur.getUid())) {
-                                userNames.add(username);
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<Conversation> conversations = new ArrayList<>();
+                            for (DocumentSnapshot document : task.getResult()) {
+                                String uid = document.getId();
+                                String username = document.getString("username");
+                                String email = document.getString("Email");
+                                if (username != null && email != null && !uid.equals(monUtilisateur.getUid())) {
+                                    conversations.add(new Conversation(uid, username, email));
+                                }
                             }
+                            UsersListDialogFragment usersDialog = new UsersListDialogFragment();
+                            usersDialog.setUsers(conversations);
+                            usersDialog.show(getSupportFragmentManager(), "UsersListDialog");
+                        } else {
+                            Log.w("DatabaseError", "Error getting documents.", task.getException());
                         }
-                        usersDialog.setUsers(userNames);
-                    } else {
-                        Log.w("DatabaseError", "Error getting documents.", task.getException());
-                    }
-                });
+                    });
         });
     }
     private void updateRecyclerView() {
@@ -207,6 +208,11 @@ public class ConversationActivity extends AppCompatActivity {
         }
     }
 
+    public void creer_discussion(Conversation conversation) {
+        Intent monIntent = new Intent(this, MessageActivity.class);
+        monIntent.putExtra("receiver", conversation);
+        startActivity(monIntent);
+    }
     public void lancer_discussion(int index) {
         Intent monIntent = new Intent(this, MessageActivity.class);
         Conversation conversation = Lesconversations.get(index);
