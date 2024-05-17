@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp">
@@ -7,41 +8,50 @@
     <!-- RECEIVER -->
 
     <LinearLayout
+        android:id="@+id/left_chat_position_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/chat_color_receiver"
-        android:background="@drawable/edit_text_rounded_corner"
-        android:padding="8dp"
         android:layout_marginEnd="80dp"
-        android:id="@+id/left_chat_layout">
+        android:background="@drawable/edit_text_rounded_corner"
+        android:backgroundTint="@color/chat_color_receiver"
+        android:minHeight="48dp"
+        android:onClick="onClickVoirPosition"
+        android:padding="8dp">
 
         <TextView
-            android:id="@+id/left_chat_textview"
+            android:id="@+id/left_chat_position_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onClickVoirPosition"
             android:text="@string/message_Gauche_Position"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:ignore="TouchTargetSizeCheck,TextContrastCheck,DuplicateSpeakableTextCheck" />
     </LinearLayout>
 
     <!-- SENDER -->
 
     <LinearLayout
+        android:id="@+id/right_chat_position_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/chat_color_sender"
-        android:background="@drawable/edit_text_rounded_corner"
-        android:padding="8dp"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="80dp"
-        android:id="@+id/right_chat_layout">
+        android:background="@drawable/edit_text_rounded_corner"
+        android:backgroundTint="@color/chat_color_sender"
+        android:minHeight="48dp"
+        android:onClick="onClickVoirPosition"
+        android:padding="8dp"
+        tools:ignore="RelativeOverlap">
 
         <TextView
-            android:id="@+id/right_chat_textview"
+            android:id="@+id/right_chat_position_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onClickVoirPosition"
             android:text="@string/message_Droite_Position"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
     </LinearLayout>
 </RelativeLayout>

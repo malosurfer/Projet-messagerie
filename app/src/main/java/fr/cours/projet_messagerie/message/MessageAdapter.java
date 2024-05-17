@@ -11,27 +11,46 @@ import java.util.List;
 
 import fr.cours.projet_messagerie.R;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int VIEW_TYPE_NORMAL = 1;
+    private static final int VIEW_TYPE_LOCATION = 2;
     private List<Message> lesMessages;
-
     public MessageAdapter(List<Message> lesMessages) {
         this.lesMessages = lesMessages;
     }
+    @Override
+    public int getItemViewType(int position) {
+        Message message = lesMessages.get(position);
+        if (message.getLatitude() != null && message.getLongitude() != null) {
+            return VIEW_TYPE_LOCATION;
+        } else {
+            return VIEW_TYPE_NORMAL;
+        }
+    }
     @NonNull
     @Override
-    public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LayoutInflater monLayoutInflater = LayoutInflater.from(parent.getContext());
 
-        View view = monLayoutInflater.inflate(R.layout.chat_message_recycler_row, parent, false);
-
-        return new MessageViewHolder(view);
+        if (viewType == VIEW_TYPE_LOCATION) {
+            View view = monLayoutInflater.inflate(R.layout.chat_message_position_recycler_row, parent, false);
+            return new PositionMessageViewHolder(view);
+        } else {
+            View view = monLayoutInflater.inflate(R.layout.chat_message_recycler_row, parent, false);
+            return new MessageViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
-        holder.mettreAJour(lesMessages.get(position));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Message message = lesMessages.get(position);
+        if (holder instanceof MessageViewHolder) {
+            ((MessageViewHolder) holder).mettreAJour(message);
+        } else if (holder instanceof PositionMessageViewHolder) {
+            ((PositionMessageViewHolder) holder).mettreAJourPosition(message);
+        }
     }
 
     @Override

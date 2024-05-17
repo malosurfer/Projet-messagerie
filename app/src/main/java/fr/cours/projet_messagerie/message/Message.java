@@ -14,7 +14,8 @@ public class Message {
         this.date = date;
     }
 
-    public Message(Double latitude, Double longitude, String sender, String receiver, Timestamp date) {
+    public Message(String  contenu, Double latitude, Double longitude, String sender, String receiver, Timestamp date) {
+        this.contenu = contenu;
         this.longitude = longitude;
         this.latitude = latitude;
         this.sender = sender;

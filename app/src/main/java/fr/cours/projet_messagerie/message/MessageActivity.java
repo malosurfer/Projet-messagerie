@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.cours.projet_messagerie.Maps.mapsActivity;
 import fr.cours.projet_messagerie.R;
 import fr.cours.projet_messagerie.conversation.Conversation;
 import fr.cours.projet_messagerie.conversation.ConversationActivity;
@@ -159,6 +160,8 @@ public class MessageActivity extends AppCompatActivity {
                                 Double longitude = document.getDouble("longitude");
                                 Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
                                 Lesmessages.add(leMessage);
+                                Message leMessage2 = new Message(content,longitude, latitude, uuidSender, uuidReceiver, time);
+                                Lesmessages.add(leMessage2);
                                 listener.onConversationsInitialized(Lesmessages);
                             } else {
                                 Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
@@ -183,9 +186,19 @@ public class MessageActivity extends AppCompatActivity {
                             String uuidReceiver = document.getString("uuidReceiver");
                             String content = document.getString("content");
                             Timestamp time = document.getTimestamp("time");
-                            Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
-                            Lesmessages.add(leMessage);
-                            listener.onConversationsInitialized(Lesmessages);
+                            if(document.contains("latitude")){
+                                Double latitude = document.getDouble("latitude");
+                                Double longitude = document.getDouble("longitude");
+                                Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
+                                Lesmessages.add(leMessage);
+                                Message leMessage2 = new Message(content,longitude, latitude, uuidSender, uuidReceiver, time);
+                                Lesmessages.add(leMessage2);
+                                listener.onConversationsInitialized(Lesmessages);
+                            } else {
+                                Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
+                                Lesmessages.add(leMessage);
+                                listener.onConversationsInitialized(Lesmessages);
+                            }
                         }
                     })
                     .addOnFailureListener(e -> {
@@ -291,6 +304,11 @@ public class MessageActivity extends AppCompatActivity {
                 checkBoxPosition.setChecked(false);
             }
         }
+    }
+
+    public void onClickVoirPosition(View view){
+        Intent monIntent = new Intent(this, mapsActivity.class);
+        startActivity(monIntent);
     }
 
     public void onClickRetourConversations(View view) {
