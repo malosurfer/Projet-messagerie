@@ -39,6 +39,7 @@
     <string name="checkbox_position">Transmettre ma position</string>
     <string name="message_Gauche_Position">Voir position du message</string>
     <string name="message_Droite_Position">Voir position du message</string>
+    <string name="maps_Retour">retour</string>
 
     <!-- GPS Activity -->
     <string name="title_activity_maps">maps_activity</string>

@@ -1,5 +1,6 @@
 package fr.cours.projet_messagerie.message;
 
+import android.util.Pair;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,7 +15,6 @@ import fr.cours.projet_messagerie.conversation.Conversation;
 
 // ViewHolderPour la position
 public class PositionMessageViewHolder extends RecyclerView.ViewHolder {
-    private TextView otherTextView;
 
     public PositionMessageViewHolder(@NonNull View itemView) { super(itemView); }
 
@@ -22,6 +22,10 @@ public class PositionMessageViewHolder extends RecyclerView.ViewHolder {
         String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         LinearLayout leftLayout = itemView.findViewById(R.id.left_chat_position_layout);
         LinearLayout rightLayout = itemView.findViewById(R.id.right_chat_position_layout);
+
+        Pair<Double, Double> longLat = new Pair<>(unMessage.getLongitude(), unMessage.getLatitude());
+        leftLayout.setTag(longLat);
+        rightLayout.setTag(longLat);
 
         if (unMessage.getSender().equals(uuid)) { // Afficher le message à droite et cacher le layout de gauche
             rightLayout.setVisibility(View.VISIBLE);

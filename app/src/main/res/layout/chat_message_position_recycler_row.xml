@@ -15,7 +15,6 @@
         android:background="@drawable/edit_text_rounded_corner"
         android:backgroundTint="@color/chat_color_receiver"
         android:minHeight="48dp"
-        android:onClick="onClickVoirPosition"
         android:padding="8dp">
 
         <TextView
@@ -40,7 +39,6 @@
         android:background="@drawable/edit_text_rounded_corner"
         android:backgroundTint="@color/chat_color_sender"
         android:minHeight="48dp"
-        android:onClick="onClickVoirPosition"
         android:padding="8dp"
         tools:ignore="RelativeOverlap">
 

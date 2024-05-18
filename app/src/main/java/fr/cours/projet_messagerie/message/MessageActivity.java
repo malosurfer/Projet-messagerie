@@ -5,10 +5,12 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -191,7 +193,7 @@ public class MessageActivity extends AppCompatActivity {
                                 Double longitude = document.getDouble("longitude");
                                 Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
                                 Lesmessages.add(leMessage);
-                                Message leMessage2 = new Message(content,longitude, latitude, uuidSender, uuidReceiver, time);
+                                Message leMessage2 = new Message(content, latitude, longitude, uuidSender, uuidReceiver, time);
                                 Lesmessages.add(leMessage2);
                                 listener.onConversationsInitialized(Lesmessages);
                             } else {
@@ -225,8 +227,8 @@ public class MessageActivity extends AppCompatActivity {
                                 public void onSuccess(Location location) {
                                     // Got last known location. In some rare situations this can be null.
                                     if (location != null) {
-                                        double latitude = location.getLatitude();
-                                        double longitude = location.getLongitude();
+                                        Double latitude = location.getLatitude();
+                                        Double longitude = location.getLongitude();
                                         // Create a new message document in Firestore
                                         Map<String, Object> message = new HashMap<>();
                                         message.put("content", messageText);
@@ -307,7 +309,16 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     public void onClickVoirPosition(View view){
+        LinearLayout linearLayout = (LinearLayout) view.getParent(); // Adapter selon la hiérarchie de votre layout
+
+        Pair<Double, Double> LongLat = (Pair<Double, Double>) linearLayout.getTag();
+        Double longitude = LongLat.first;
+        Double latitude = LongLat.second;
+
         Intent monIntent = new Intent(this, mapsActivity.class);
+        monIntent.putExtra("longitude", longitude);
+        monIntent.putExtra("latitude", latitude);
+
         startActivity(monIntent);
     }
 
