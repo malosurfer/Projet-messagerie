@@ -162,7 +162,7 @@ public class MessageActivity extends AppCompatActivity {
                                 Double longitude = document.getDouble("longitude");
                                 Message leMessage = new Message(content, uuidSender, uuidReceiver, time);
                                 Lesmessages.add(leMessage);
-                                Message leMessage2 = new Message(content,longitude, latitude, uuidSender, uuidReceiver, time);
+                                Message leMessage2 = new Message(content, latitude, longitude, uuidSender, uuidReceiver, time);
                                 Lesmessages.add(leMessage2);
                                 listener.onConversationsInitialized(Lesmessages);
                             } else {

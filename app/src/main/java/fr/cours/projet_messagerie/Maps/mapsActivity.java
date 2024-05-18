@@ -43,7 +43,7 @@ public class mapsActivity extends FragmentActivity implements OnMapReadyCallback
         Double longitude = intent.getDoubleExtra("longitude", 0.0);
         Double latitude = intent.getDoubleExtra("latitude", 0.0);
         // ajoute le marker
-        LatLng msgPosition = new LatLng(longitude, latitude);
+        LatLng msgPosition = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(msgPosition));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(msgPosition));
     }
